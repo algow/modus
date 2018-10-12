@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 
-class timeConverter:
+class TimeConverter:
     __column = ['invoice', 'sp2d', 'jenis', 'tgl_upload', 'jam_upload', 'tgl_selesai', 'jam_selesai', 'durasi']
     __toSecond = []
     lazySpm = []
@@ -40,17 +40,22 @@ class GetParameter:
         return np.mean(self.__times)
 
     def __toHour(self, number):
-        return round(number/3600, 3)
+        return round(number/3600, 2)
 
     def __dateFormat(self, date):
         informated = datetime.strptime(self.__date, '%d-%m-%Y')
         return informated.strftime('%Y-%m-%d')
 
-    def __lazySpmPercentage(self):
-        return len(self.__lazySpm)/len(self.__times)
+    def __lazySpmTotal(self):
+        return len(self.__lazySpm)
+
+    def __capaianPercentage(self):
+        patuh = len(self.__times) - self.__lazySpmTotal()
+        return round(patuh / len(self.__times), 2)
 
     def toJson(self):
         getJson = {'date': self.__dateFormat(self.__date), 'total': len(self.__times),
                    'average': self.__toHour(self.__average()), 'max': self.__toHour(max(self.__times)),
-                   'min': self.__toHour(min(self.__times)), 'late': round(self.__lazySpmPercentage(), 3)}
+                   'min': self.__toHour(min(self.__times)), 'late': self.__lazySpmTotal(),
+                   'capaian': self.__capaianPercentage()}
         return json.dumps(getJson)

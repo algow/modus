@@ -1,18 +1,18 @@
 class CollectingData:
     __relevantRow = []
     __relevantRows = []
-    __j = 5
+    __j = 5     # Initial column
 
     def __init__(self, activeSheet):
         self.__activeSheet = activeSheet
-        self.date = self.__activeSheet['E5']
+        self.date = self.__activeSheet['E5'].value
 
     def findNonGajiInduk(self):
         if self.__activeSheet[self.__activeCell()].value is not None:
             if self.__activeSheet[self.__activeCell()].value != "GAJI INDUK":
                 self.__collectingRowData()
             self.__j += 1
-            # Recursion
+            # RECURSION
             self.findNonGajiInduk()
             return self.__relevantRows
         return None
